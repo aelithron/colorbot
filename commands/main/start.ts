@@ -1,5 +1,5 @@
 import { createCanvas, Image, loadImage } from '@napi-rs/canvas';
-import { AttachmentBuilder, ChatInputCommandInteraction, SlashCommandBuilder, StringSelectMenuBuilder } from 'discord.js';
+import { ActionRowBuilder, AttachmentBuilder, ChatInputCommandInteraction, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuComponent, StringSelectMenuOptionBuilder } from 'discord.js';
 
 export const data = new SlashCommandBuilder()
 	.setName('start')
@@ -20,8 +20,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 	}
 	const canvas = createCanvas(500, 500);
 	const context = canvas.getContext('2d');
-
+	context.drawImage(image, 0, 0, canvas.width, canvas.height);
 	const colorPicker = new StringSelectMenuBuilder()
 		.setCustomId('color-filter')
-	await interaction.editReply({ files: [new AttachmentBuilder(await canvas.encode('png'), { name: 'image.png' })] })
+		.setPlaceholder('Add a color...')
+		.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setLabel('Rainbow')
+				.setEmoji('🌈')
+				.setDescription('Add a rainbow filter over your image!')
+				.setValue('rainbow')
+		)
+
+	const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(colorPicker);
+	await interaction.editReply({ files: [new AttachmentBuilder(await canvas.encode('png'), { name: 'image.png' })], components: [row] });
 };

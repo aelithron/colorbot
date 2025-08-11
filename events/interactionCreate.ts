@@ -1,5 +1,6 @@
-import { Events, Interaction, MessageFlags } from 'discord.js';
+import { AttachmentBuilder, Events, Interaction, MessageFlags } from 'discord.js';
 import { ClientWithCommands } from '../colorbot';
+import { createCanvas, loadImage } from '@napi-rs/canvas';
 
 export const name = Events.InteractionCreate;
 export async function execute(interaction: Interaction) {
@@ -20,15 +21,27 @@ export async function execute(interaction: Interaction) {
       }
     }
   } else if (interaction.isStringSelectMenu()) {
-    if (interaction.id === 'color-filter') {
-      interaction.component.id
+    if (interaction.customId === 'color-filter') {
+      const color = interaction.values[0];
+      if (!color) {
+        await interaction.reply({ content: `invalid color!`, flags: MessageFlags.Ephemeral });
+        return;
+      }
+      
+      const image = await loadImage(interaction.message.attachments.first()!.url);
+      const canvas = createCanvas(500, 500);
+      const context = canvas.getContext('2d');
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      context.globalAlpha = 0.35;
       switch (color) {
         case "rainbow":
-          
+          context.drawImage(await loadImage('https://hc-cdn.hel1.your-objectstorage.com/s/v3/166fb2d12d291df51b25a25428db818c6e36e4fa_image.png'), 0, 0, canvas.width, canvas.height);
+          break;
         default:
-          await interaction.reply(`Color option ${color} is invalid!`);
+          await interaction.reply({ content: `invalid color "${color}"!`, flags: MessageFlags.Ephemeral });
           return;
       }
-    }
+      await interaction.update({ files: [new AttachmentBuilder(await canvas.encode('png'), { name: 'image.png' })] });
+    } else return;
   } else return;
 }
