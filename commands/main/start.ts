@@ -29,7 +29,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 				.setLabel('Rainbow')
 				.setEmoji('🌈')
 				.setDescription('Add a rainbow filter over your image!')
-				.setValue('rainbow')
+				.setValue('rainbow'),
+			new StringSelectMenuOptionBuilder()
+				.setLabel('Rainbow Flag')
+				.setEmoji('🏳️‍🌈')
+				.setDescription('Rainbow flag over the image!')
+				.setValue('rainbowflag')
 		)
 
 	const row = new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(colorPicker);

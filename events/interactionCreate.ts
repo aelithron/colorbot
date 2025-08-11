@@ -27,7 +27,7 @@ export async function execute(interaction: Interaction) {
         await interaction.reply({ content: `invalid color!`, flags: MessageFlags.Ephemeral });
         return;
       }
-      
+
       const image = await loadImage(interaction.message.attachments.first()!.url);
       const canvas = createCanvas(500, 500);
       const context = canvas.getContext('2d');
@@ -37,6 +37,13 @@ export async function execute(interaction: Interaction) {
         case "rainbow":
           context.drawImage(await loadImage('https://hc-cdn.hel1.your-objectstorage.com/s/v3/166fb2d12d291df51b25a25428db818c6e36e4fa_image.png'), 0, 0, canvas.width, canvas.height);
           break;
+        case "rainbowflag":
+          context.drawImage(await loadImage('https://hc-cdn.hel1.your-objectstorage.com/s/v3/166fb2d12d291df51b25a25428db818c6e36e4fa_image.png'), 0, 0, canvas.width, canvas.height);
+          break;
+        // case "purple":
+        //   context.
+        //   context.rect()
+        //   
         default:
           await interaction.reply({ content: `invalid color "${color}"!`, flags: MessageFlags.Ephemeral });
           return;
