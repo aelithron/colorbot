@@ -19,5 +19,16 @@ export async function execute(interaction: Interaction) {
         await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
       }
     }
+  } else if (interaction.isStringSelectMenu()) {
+    if (interaction.id === 'color-filter') {
+      interaction.component.id
+      switch (color) {
+        case "rainbow":
+          
+        default:
+          await interaction.reply(`Color option ${color} is invalid!`);
+          return;
+      }
+    }
   } else return;
 }
